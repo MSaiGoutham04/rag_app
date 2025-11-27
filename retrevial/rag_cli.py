@@ -82,11 +82,13 @@ MAX_CONTEXT_CHARS = 4000   # safety limit
 
 # ----------- LLM Call (OpenAI v1.x) -----------
 from openai import OpenAI
+import os
 
 client = OpenAI(
-  base_url="https://openrouter.ai/api/v1",
-  api_key="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",
-) # auto-reads OPENAI_API_KEY
+    # Read from environment variables instead of hardcoding
+    base_url=os.getenv("OPENAI_BASE_URL", ""),   # defaults to "" if not set
+    api_key=os.getenv("OPENAI_API_KEY")          # must be set in environment
+)
 
 def call_llm(prompt: str) -> str:
     resp = client.chat.completions.create(
